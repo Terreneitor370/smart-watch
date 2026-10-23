@@ -1,0 +1,309 @@
+:root {
+  --fg: #f4f4f5;
+  --muted: #8b8b95;
+  --surface: #26262c;
+  --c-clock: #38bdf8;
+  --c-stopwatch: #fbbf24;
+  --c-timer: #f472b6;
+  --c-steps: #4ade80;
+  --c-heart: #f87171;
+  --size: min(100vw, 100dvh, 380px);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #000;
+  color: var(--fg);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+#root {
+  display: grid;
+  place-items: center;
+}
+
+/* Pantalla redonda: en un reloj real ocupa todo; en telefono/navegador queda como un reloj centrado. */
+.watch {
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  container-type: size;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #050507;
+  box-shadow: 0 0 0 calc(var(--size) * 0.015) #1b1b21;
+}
+
+.viewport {
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.page {
+  flex: 0 0 100%;
+  height: 100%;
+}
+
+.screen {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5cqw;
+  padding: 12cqw 14cqw 14cqw;
+  text-align: center;
+  --accent: var(--c-clock);
+}
+
+/* Textos */
+.title {
+  margin: 0;
+  font-size: 5.8cqw;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.big {
+  margin: 0;
+  font-size: 18cqw;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.big.mono {
+  font-size: 14.5cqw;
+}
+
+.mono {
+  font-variant-numeric: tabular-nums;
+}
+
+.unit {
+  font-size: 6cqw;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.hint {
+  margin: 0;
+  font-size: 4.8cqw;
+  color: var(--muted);
+}
+
+/* Botones */
+.buttons {
+  display: flex;
+  gap: 3cqw;
+  margin-top: 3cqw;
+}
+
+.btn {
+  height: 12.5cqw;
+  min-width: 14cqw;
+  padding: 0 5cqw;
+  border: 0;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--fg);
+  font: inherit;
+  font-size: 5.2cqw;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-main {
+  background: var(--accent);
+  color: #000;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.chips {
+  display: flex;
+  gap: 2.5cqw;
+  margin-top: 1cqw;
+}
+
+.chip {
+  height: 9cqw;
+  padding: 0 4cqw;
+  border: 0;
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  font: inherit;
+  font-size: 4.6cqw;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.chip-on {
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+  color: var(--accent);
+}
+
+/* Anillos */
+.ring {
+  transform: rotate(-90deg);
+}
+
+.ring-full {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.ring circle {
+  fill: none;
+}
+
+.ring-track {
+  stroke: #1b1b21;
+}
+
+.ring-bar {
+  stroke-linecap: round;
+  transition: stroke-dashoffset 250ms linear;
+}
+
+.ring-live .ring-bar {
+  transition: none;
+}
+
+/* Cara del reloj */
+.face .date {
+  margin: 0;
+  font-size: 6cqw;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.face .date::first-letter {
+  text-transform: uppercase;
+}
+
+.face .time {
+  margin: 0;
+  font-size: 22cqw;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.face .secs {
+  margin-left: 1.5cqw;
+  font-size: 7.5cqw;
+  font-weight: 600;
+  color: var(--c-clock);
+  letter-spacing: 0;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 4cqw;
+  margin: 3cqw 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 4.6cqw;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Pulso */
+.heart {
+  margin: 2cqw 0;
+  font-size: 14cqw;
+  line-height: 1;
+}
+
+.heart.beating {
+  animation: beat calc(60s / var(--bpm)) ease-in-out infinite;
+}
+
+.heart.scanning {
+  animation: beat 0.6s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.18); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.1); }
+}
+
+.blink {
+  color: var(--c-timer);
+  animation: blink 0.8s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to { visibility: hidden; }
+}
+
+/* Indicador de pantallas */
+.dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 4.5cqw;
+  display: flex;
+  justify-content: center;
+  gap: 2.4cqw;
+  pointer-events: none;
+}
+
+.dot {
+  width: 2.2cqw;
+  height: 2.2cqw;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #3a3a43;
+  pointer-events: auto;
+  transition: background 200ms, transform 200ms;
+}
+
+.dot-on {
+  background: var(--fg);
+  transform: scale(1.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track { transition: none; }
+  .heart.beating, .heart.scanning, .blink { animation: none; }
+}
